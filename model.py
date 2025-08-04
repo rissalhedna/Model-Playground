@@ -10,7 +10,7 @@ class LightweightClassifier(nn.Module):
     Optimized for 224x224 input and efficient inference
     """
 
-    def __init__(self, n_channels=3, n_classes=3):
+    def __init__(self, n_channels=3, n_classes=4):
         super().__init__()
         self.n_channels = n_channels
         self.n_classes = n_classes
@@ -67,7 +67,8 @@ class LightweightClassifier(nn.Module):
     def _initialize_weights(self):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
-                nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="relu")
+                nn.init.kaiming_normal_(
+                    m.weight, mode="fan_out", nonlinearity="relu")
                 if m.bias is not None:
                     nn.init.constant_(m.bias, 0)
             elif isinstance(m, nn.BatchNorm2d):
@@ -84,7 +85,7 @@ class TinyClassifier(nn.Module):
     Even smaller and faster than LightweightClassifier
     """
 
-    def __init__(self, n_channels=3, n_classes=3):
+    def __init__(self, n_channels=3, n_classes=4):
         super().__init__()
         self.n_channels = n_channels
         self.n_classes = n_classes
@@ -106,7 +107,8 @@ class TinyClassifier(nn.Module):
             nn.AdaptiveAvgPool2d(1),
         )
 
-        self.classifier = nn.Sequential(nn.Dropout(0.2), nn.Linear(512, n_classes))
+        self.classifier = nn.Sequential(
+            nn.Dropout(0.2), nn.Linear(512, n_classes))
 
         self._initialize_weights()
 
@@ -119,7 +121,8 @@ class TinyClassifier(nn.Module):
     def _initialize_weights(self):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
-                nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="relu")
+                nn.init.kaiming_normal_(
+                    m.weight, mode="fan_out", nonlinearity="relu")
                 if m.bias is not None:
                     nn.init.constant_(m.bias, 0)
             elif isinstance(m, nn.BatchNorm2d):
@@ -144,7 +147,7 @@ class UNet(nn.Module):
         self.up3 = up(64, 32)
         self.fc = nn.Sequential(
             nn.Linear(18432, 24),
-            nn.Linear(24, 10),
+            nn.Linear(24, n_classes),
         )
 
     def forward(self, x):
@@ -159,7 +162,7 @@ class UNet(nn.Module):
         return x
 
 
-def create_lightweight_classifier(input_channels=3, num_classes=3):
+def create_lightweight_classifier(input_channels=3, num_classes=4):
     """
     Create a lightweight image classifier
 
@@ -173,7 +176,7 @@ def create_lightweight_classifier(input_channels=3, num_classes=3):
     return LightweightClassifier(input_channels, num_classes)
 
 
-def create_tiny_classifier(input_channels=3, num_classes=3):
+def create_tiny_classifier(input_channels=3, num_classes=4):
     """
     Create an ultra-lightweight classifier for edge deployment
 
@@ -188,9 +191,9 @@ def create_tiny_classifier(input_channels=3, num_classes=3):
 
 
 # Legacy functions for backward compatibility
-def create_lightweight_detector(input_channels=3, num_classes=3):
+def create_lightweight_detector(input_channels=3, num_classes=4):
     return create_lightweight_classifier(input_channels, num_classes)
 
 
-def create_nano_detector(input_channels=3, num_classes=3):
+def create_nano_detector(input_channels=3, num_classes=4):
     return create_tiny_classifier(input_channels, num_classes)
