@@ -21,7 +21,6 @@ def up(in_channels, out_channels):
 
 
 class DSConv(nn.Module):
-    """Depthwise Separable Convolution - inspired by YOLOv13"""
 
     def __init__(self, in_channels, out_channels, kernel_size=3, stride=1, padding=1):
         super().__init__()
@@ -40,7 +39,6 @@ class DSConv(nn.Module):
 
 
 class DSBottleneck(nn.Module):
-    """Lightweight bottleneck using depthwise separable convolutions"""
 
     def __init__(self, in_channels, out_channels, shortcut=True):
         super().__init__()
@@ -55,7 +53,6 @@ class DSBottleneck(nn.Module):
 
 
 class C3DSBlock(nn.Module):
-    """CSP Bottleneck with 3 convolutions using DS convolutions"""
 
     def __init__(self, in_channels, out_channels, n=1, shortcut=True):
         super().__init__()
@@ -74,7 +71,6 @@ class C3DSBlock(nn.Module):
 
 
 class SPPF(nn.Module):
-    """Spatial Pyramid Pooling - Fast version"""
 
     def __init__(self, in_channels, out_channels, k=5):
         super().__init__()
