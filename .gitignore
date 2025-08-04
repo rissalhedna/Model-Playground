@@ -225,3 +225,4 @@ secrets.json
 .env.local
 .env.production
 /trailer-53ft-data/
+trailer-53ft-data-large/
